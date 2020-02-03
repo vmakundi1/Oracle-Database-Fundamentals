@@ -1,0 +1,87 @@
+--What is PL/SQL: Procedural programming language that allows developers to create scripts that have variables--
+--IF-THEN-ELSE, loops and function/procedure calls--
+--PL/SQL Program Units--
+--a program unit is a named PL/SQL block of code that is stored, pre-compiled in the database--
+--types: Procedure: can manupulate and change multiple values--
+--function: returns a single value--
+--package: a code that provides a way to manage large numbers of related procedures and functions--
+--package is stored and executed from the server--
+--what is the difference between function and package?--
+--a procedure does not directly return a value but a function does--
+--a procedure cannnot appear in an sql statement but a function can--
+--a procedure cannot appear in an assignment statement but a function can--
+--examples of functions--
+
+CREATE OR REPLACE FUNCTION FN_GET_SNAME
+(P_SID NUMBER)   --p stands for parameter--
+    RETURN VARCHAR2
+
+    AS  
+
+      V_SNAME VARCHAR2(50);
+    BEGIN
+      SELECT SNAME
+      INTO V_SNAME
+      FROM MM STUDENT
+      WHERE SID = P_SID;
+
+      RETURN V_SNAME;
+    END FN_GET_SNAME;
+    /
+    SHOW ERRORS
+
+
+CREATE OR REPLACE FUNCTION FN_GET_SNAME_AND_EDATE
+(P_SID CHAR)
+RETURN VARCHAR2
+
+AS
+  V_SNAME VARCHAR2(50);
+  V_EDATE DATE;
+  V_OUTPUT VARCHAR2(75);
+BEGIN
+  SELECT SNAME, V_EDATE
+  INTO V_SNAME, V_EDATE
+  FROM MM_STUDENT
+  WHERE SID = P_SID;
+
+  V_OUTPUT = V_SNAME || TO_CHAR(V_EDATE, 'DD-MON-YYYY');
+  RETURN V_OUTPUT;
+END FN_GET_SNAME_AND_EDATE;
+/
+SHOW ERRORS
+
+CREATE OR REPLACE FUNCTION FN_SHOW_COURSE_INFORMATION'
+(P_CID CHAR)
+RETURN VARCHAR2
+
+AS
+  V_COUNT NUMBER(3,0);
+  V_CNAME VARCHAR2(50);
+  V_OUTPUT VARCHAR2(80);
+
+BEGIN
+  SELECT CNAME 
+  INTO V_CNAME
+  FROM MM_COURSE
+  WHERE CID = P_CID;
+
+  SELECT COUNT(SID) --double check on this if its CID or SID--
+  INTO V_COUNT
+  FROM MM_GRADE
+  WHERE CID=P_CID;
+
+  V_OUTPUT = 'THE COURSE' || V_CNAME;
+  IF V_COUNT = 0 THEN
+     V_OUTPUT=V_OUTPUT || 'IS EMPTY';
+  ELSE IF V_COUNT >= 25 THEN
+     V_OUTPUT = V_OUTPUT || 'IS FULL';
+  ELSE
+     V_OUTPUT = V_OUTPUT || 'HAS'||
+         TO_CHAR(V_COUNT) || 'STUDENTS';
+  END IF;
+  RETURN V_OUTPUT;
+END FN_SHOW_COURSE_INFORMATION;
+/
+SHOW ERRORS
+

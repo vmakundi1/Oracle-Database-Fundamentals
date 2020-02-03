@@ -1,0 +1,8 @@
+--Note: this procedure below has not error checks, no error messages--
+
+CREATE OR REPLACE PROCEDURE PR_UPDATE_MARK1
+(P_SID NUMBER, P_CID CHAR, P_MARK NUMBER)
+AS
+BEGIN
+    UPDATE MM_GRADE
+    SET MARK = P_MARKWHERE SID = P_SID AND CID = P_CID;

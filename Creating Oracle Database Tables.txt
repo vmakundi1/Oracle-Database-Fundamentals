@@ -1,0 +1,6 @@
+--when creating a table ensure to name your constraints--
+--(example of a tabke creation)--
+--Create table MM_STUDENT
+--(  SID
+
+--)
